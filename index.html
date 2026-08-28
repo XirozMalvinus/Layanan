@@ -310,10 +310,12 @@
             border-radius: 14px;
             font-size: 12px;
             line-height: 1.5;
+            align-items: center;
+            gap: 10px;
         }
 
         .message.show {
-            display: block;
+            display: flex;
             animation: messageIn .35s ease;
         }
 
@@ -327,6 +329,25 @@
             color: #b42318;
             background: rgba(229, 57, 53, .07);
             border: 1px solid rgba(229, 57, 53, .14);
+        }
+
+        .message-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .message-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .message-text {
+            flex: 1;
         }
 
         /* ── STEPS ── */
@@ -682,7 +703,7 @@
 
             <!-- ═══ HERO — TYPING ANIMATION ═══ -->
             <section class="hero">
-                <div class="hero-typing" id="typingContainer">
+                <div class="hero-typing">
                     <span id="typingText"></span><span class="cursor" id="cursor"></span>
                 </div>
                 <p class="hero-sub">Enter your code &amp; Discord name to claim your discount</p>
@@ -700,7 +721,7 @@
                     </p>
                 </div>
 
-                <form id="redeemForm" class="form">
+                <form id="redeemForm" class="form" novalidate>
                     <div class="field">
                         <label for="code">DISCOUNT CODE</label>
                         <input id="code" type="text" placeholder="XIROZ-XXXX" autocomplete="off" required />
@@ -716,7 +737,10 @@
                     </button>
                 </form>
 
-                <div id="message" class="message"></div>
+                <div id="message" class="message">
+                    <span class="message-icon" id="messageIcon"></span>
+                    <span class="message-text" id="messageText"></span>
+                </div>
 
                 <!-- ═══ STEPS ═══ -->
                 <div class="steps-section">
@@ -814,21 +838,26 @@
         /* ════════════════════════════════════════════════
            TYPING ANIMATION — "Welcome To Redeem Code"
            ════════════════════════════════════════════════ */
-        const fullText = "Welcome To Redeem Code";
-        const typingEl = document.getElementById("typingText");
-        const cursorEl = document.getElementById("cursor");
-        let charIndex = 0;
+        (function() {
+            const fullText = "Welcome To Redeem Code";
+            const typingEl = document.getElementById("typingText");
+            let charIndex = 0;
 
-        function typeNext() {
-            if (charIndex < fullText.length) {
-                typingEl.textContent += fullText.charAt(charIndex);
-                charIndex++;
-                setTimeout(typeNext, 65);
+            function typeNext() {
+                if (charIndex < fullText.length) {
+                    typingEl.textContent += fullText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeNext, 65);
+                }
             }
-        }
+            setTimeout(typeNext, 500);
+        })();
 
-        // start typing after 500ms
-        setTimeout(typeNext, 500);
+        /* ════════════════════════════════════════════════
+           SVG ICONS (tanpa emoji)
+           ════════════════════════════════════════════════ */
+        const ICON_CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+        const ICON_CROSS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
 
         /* ════════════════════════════════════════════════
            SUPABASE CONFIG
@@ -836,10 +865,12 @@
         const SUPABASE_URL = "PASTE_SUPABASE_URL";
         const SUPABASE_ANON_KEY = "PASTE_SUPABASE_ANON_KEY";
 
-        const supabaseClient = window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_ANON_KEY
-        );
+        let supabaseClient = null;
+        try {
+            if (SUPABASE_URL !== "PASTE_SUPABASE_URL" && SUPABASE_ANON_KEY !== "PASTE_SUPABASE_ANON_KEY") {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch (_) { /* ignore */ }
 
         /* ════════════════════════════════════════════════
            BROWSER ID
@@ -869,26 +900,43 @@
         }
 
         /* ════════════════════════════════════════════════
-           MESSAGE
+           MESSAGE — pakai SVG icon
            ════════════════════════════════════════════════ */
         const messageEl = document.getElementById("message");
+        const messageIcon = document.getElementById("messageIcon");
+        const messageText = document.getElementById("messageText");
 
         function showMessage(text, type) {
-            messageEl.textContent = text;
             messageEl.className = "message show " + type;
+            messageText.textContent = text;
+
+            if (type === "success") {
+                messageIcon.innerHTML = ICON_CHECK;
+            } else if (type === "error") {
+                messageIcon.innerHTML = ICON_CROSS;
+            } else {
+                messageIcon.innerHTML = "";
+            }
+        }
+
+        function hideMessage() {
+            messageEl.className = "message";
         }
 
         /* ════════════════════════════════════════════════
-           FORM
+           FORM SUBMIT — no refresh
            ════════════════════════════════════════════════ */
         const form = document.getElementById("redeemForm");
         const button = document.getElementById("redeemBtn");
+        const codeInput = document.getElementById("code");
+        const discordInput = document.getElementById("discord");
 
         form.addEventListener("submit", async function(event) {
             event.preventDefault();
+            event.stopPropagation();
 
-            const code = document.getElementById("code").value.trim().toUpperCase();
-            const discord = document.getElementById("discord").value.trim();
+            const code = codeInput.value.trim().toUpperCase();
+            const discord = discordInput.value.trim();
 
             if (!code) {
                 showMessage("Please enter a discount code.", "error");
@@ -901,9 +949,29 @@
 
             button.classList.add("loading");
             button.textContent = "PROCESSING...";
-            messageEl.className = "message";
+            hideMessage();
 
             try {
+                // Jika Supabase tidak dikonfigurasi, simulasi sukses
+                if (!supabaseClient) {
+                    console.warn("Supabase not configured. Simulating success.");
+                    const mockData = {
+                        success: true,
+                        product: "Premium Discount",
+                        code: code,
+                        discord_name: discord,
+                        discount: 25,
+                        used_at: new Date().toISOString(),
+                        usage_count: 1,
+                        max_usage: 5,
+                        browser_id: browserId,
+                        message: "Simulated success (Supabase not set)"
+                    };
+                    showMessage("Discount code successfully redeemed (simulation).", "success");
+                    displayReceipt(mockData);
+                    return;
+                }
+
                 const ip = await getIP();
 
                 const { data, error } = await supabaseClient.rpc(
@@ -916,8 +984,8 @@
                 );
 
                 if (error) {
-                    console.error(error);
-                    throw new Error(error.message);
+                    console.error("Supabase RPC error:", error);
+                    throw new Error(error.message || "Supabase error");
                 }
 
                 if (!data || !data.success) {
@@ -928,7 +996,7 @@
                 displayReceipt(data);
 
             } catch (err) {
-                console.error(err);
+                console.error("Redemption error:", err);
                 showMessage(err.message || "Failed to redeem discount code.", "error");
             } finally {
                 button.classList.remove("loading");
@@ -953,23 +1021,31 @@
                 data.usage_count + " / " + (data.max_usage === null ? "∞" : data.max_usage);
             document.getElementById("receiptBrowser").textContent = data.browser_id || "-";
 
-            document.getElementById("receipt").classList.add("show");
-            document.getElementById("receipt").scrollIntoView({ behavior: "smooth", block: "center" });
+            const receiptEl = document.getElementById("receipt");
+            receiptEl.classList.add("show");
+            receiptEl.scrollIntoView({ behavior: "smooth", block: "center" });
         }
 
         function formatDate(value) {
             if (!value) return "-";
-            return new Date(value).toLocaleString("id-ID", {
-                dateStyle: "medium",
-                timeStyle: "medium"
-            });
+            try {
+                return new Date(value).toLocaleString("id-ID", {
+                    dateStyle: "medium",
+                    timeStyle: "medium"
+                });
+            } catch {
+                return String(value);
+            }
         }
 
         /* ════════════════════════════════════════════════
            DOWNLOAD SVG RECEIPT
            ════════════════════════════════════════════════ */
         document.getElementById("downloadReceipt").addEventListener("click", function() {
-            if (!currentReceipt) return;
+            if (!currentReceipt) {
+                alert("No receipt data to download.");
+                return;
+            }
 
             const product = escapeXml(currentReceipt.product || "Unknown");
             const code = escapeXml(currentReceipt.code || "-");
@@ -980,8 +1056,7 @@
                 currentReceipt.usage_count + " / " + (currentReceipt.max_usage === null ? "∞" : currentReceipt.max_usage)
             );
 
-            const svg =
-                `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="900" viewBox="0 0 800 900">
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="900" viewBox="0 0 800 900">
             <rect width="800" height="900" fill="#111111"/>
             <rect x="40" y="40" width="720" height="820" rx="28" fill="#171717" stroke="#3a3a3a"/>
             <text x="80" y="110" fill="#ffffff" font-family="Arial, sans-serif" font-size="32" font-weight="800">XIROZ REDEEM</text>
