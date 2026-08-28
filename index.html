@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redeem Code — Xiroz</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ── RESET ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f6f6f3;
+            --card: #ffffff;
+            --text: #111111;
+            --muted: #777;
+            --border: #e8e6df;
+            --gold: #c9a227;
+            --gold2: #eadb9b;
+            --green: #18a558;
+            --red: #e53935;
+            --shadow: 0 25px 70px rgba(0, 0, 0, .08);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 85% 5%, rgba(201, 162, 39, .15), transparent 28%),
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, .9), transparent 30%),
+                var(--bg);
+            color: var(--text);
+            font-family: Inter, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* grid bg */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(0, 0, 0, .018) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, .018) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        .container {
+            width: min(900px, calc(100% - 28px));
+            margin: auto;
+        }
+
+        /* ── HEADER ── */
+        header {
+            padding-top: 22px;
+            animation: fadeDown .8s ease;
+        }
+
+        .header-card {
+            min-height: 92px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 18px;
+            border: 1px solid rgba(201, 162, 39, .2);
+            border-radius: 25px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, .98), rgba(255, 255, 255, .9));
+            box-shadow: var(--shadow);
+        }
+
+        .header-logo {
+            width: 62px;
+            height: 62px;
+            border-radius: 18px;
+            object-fit: cover;
+            border: 2px solid rgba(201, 162, 39, .3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .1);
+            transition: .35s ease;
+        }
+        .header-logo:hover {
+            transform: scale(1.05) rotate(-3deg);
+        }
+
+        .header-label {
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .18em;
+        }
+
+        .header-name {
+            margin-top: 5px;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -.04em;
+        }
+
+        .header-status {
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            text-align: center;
+            padding: 75px 0 45px;
+        }
+
+        .hero-line {
+            display: block;
+            font-size: clamp(36px, 8vw, 72px);
+            font-weight: 800;
+            letter-spacing: -.06em;
+            line-height: 1.1;
+            min-height: 1.3em;
+        }
+
+        .hero-line .cursor {
+            display: inline-block;
+            width: 4px;
+            height: .9em;
+            margin-left: 4px;
+            vertical-align: -.06em;
+            background: var(--gold);
+            animation: blink .7s infinite;
+        }
+
+        .hero-sub {
+            margin-top: 14px;
+            color: var(--muted);
+            font-size: clamp(14px, 2.2vw, 19px);
+            font-weight: 400;
+            letter-spacing: .02em;
+        }
+
+        /* ── REDEEM CARD ── */
+        .redeem-card {
+            position: relative;
+            padding: 32px;
+            border-radius: 27px;
+            background: rgba(255, 255, 255, .9);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: cardIn .9s .25s both;
+        }
+
+        .redeem-card::before {
+            content: "";
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            right: -120px;
+            top: -150px;
+            border-radius: 50%;
+            background: rgba(201, 162, 39, .12);
+            filter: blur(30px);
+            pointer-events: none;
+        }
+
+        .card-head {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .17em;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            margin-top: 8px;
+            font-size: clamp(27px, 6vw, 40px);
+            letter-spacing: -.055em;
+            font-weight: 800;
+        }
+
+        .card-description {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* ── FORM ── */
+        .form {
+            position: relative;
+            z-index: 2;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            height: 55px;
+            padding: 0 16px;
+            outline: none;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: #fafaf8;
+            color: var(--text);
+            font: 600 13px "JetBrains Mono", monospace;
+            transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+        }
+
+        input:focus {
+            border-color: rgba(201, 162, 39, .65);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(201, 162, 39, .08);
+        }
+
+        input::placeholder {
+            color: #aaa;
+        }
+
+        .redeem-btn {
+            position: relative;
+            width: 100%;
+            height: 57px;
+            margin-top: 5px;
+            border: 0;
+            border-radius: 16px;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(135deg, #111, #292929);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: .02em;
+            overflow: hidden;
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+
+        .redeem-btn::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, .18), transparent 80%);
+            transform: translateX(-120%);
+            transition: .6s ease;
+        }
+
+        .redeem-btn:hover::before {
+            transform: translateX(120%);
+        }
+
+        .redeem-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .16);
+        }
+
+        .redeem-btn:active {
+            transform: scale(.985);
+        }
+
+        .redeem-btn.loading {
+            pointer-events: none;
+            opacity: .7;
+        }
+
+        /* ── MESSAGE ── */
+        .message {
+            display: none;
+            margin-top: 18px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .message.show {
+            display: block;
+            animation: messageIn .35s ease;
+        }
+
+        .message.success {
+            color: #087a3d;
+            background: rgba(24, 165, 88, .08);
+            border: 1px solid rgba(24, 165, 88, .16);
+        }
+
+        .message.error {
+            color: #b42318;
+            background: rgba(229, 57, 53, .07);
+            border: 1px solid rgba(229, 57, 53, .14);
+        }
+
+        /* ── STEPS ── */
+        .steps-section {
+            position: relative;
+            z-index: 2;
+            margin-top: 32px;
+            padding-top: 28px;
+            border-top: 1px solid var(--border);
+        }
+
+        .steps-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            color: var(--muted);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(255, 255, 255, .6);
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, .04);
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+
+        .step-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .05);
+        }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), #b8921f);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .step-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .step-desc {
+            font-size: 10.5px;
+            color: var(--muted);
+            line-height: 1.4;
+            margin-top: 2px;
+        }
+
+        /* ── RECEIPT ── */
+        .receipt {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 23px;
+            background: #111;
+            color: white;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, .18);
+            animation: receiptIn .7s cubic-bezier(.2, .8, .2, 1);
+        }
+
+        .receipt.show {
+            display: block;
+        }
+
+        .receipt-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #3a3a3a;
+        }
+
+        .receipt-brand {
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .receipt-success {
+            padding: 7px 10px;
+            border-radius: 99px;
+            background: rgba(24, 165, 88, .15);
+            color: #45dc83;
+            font: 700 9px "JetBrains Mono";
+        }
+
+        .receipt-title {
+            margin-top: 24px;
+            color: #aaa;
+            font: 700 10px "JetBrains Mono";
+            text-transform: uppercase;
+            letter-spacing: .15em;
+        }
+
+        .receipt-product {
+            margin-top: 6px;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -.04em;
+        }
+
+        .receipt-list {
+            margin-top: 20px;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 12px 0;
+            border-bottom: 1px solid #282828;
+            font-size: 12px;
+        }
+
+        .receipt-label {
+            color: #888;
+        }
+
+        .receipt-value {
+            text-align: right;
+            font: 600 11px "JetBrains Mono";
+            max-width: 60%;
+            overflow-wrap: anywhere;
+        }
+
+        .receipt-discount {
+            color: #45dc83;
+        }
+
+        .download-btn {
+            width: 100%;
+            height: 50px;
+            margin-top: 22px;
+            border: 1px solid #444;
+            border-radius: 13px;
+            background: #1d1d1d;
+            color: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: .25s ease;
+        }
+
+        .download-btn:hover {
+            background: #292929;
+            transform: translateY(-2px);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 45px 0;
+            text-align: center;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        /* ── TOUCH ── */
+        .touch {
+            position: fixed;
+            width: 7px;
+            height: 7px;
+            pointer-events: none;
+            z-index: 9999;
+            border-radius: 50%;
+            background: var(--gold);
+            transform: translate(-50%, -50%);
+            animation: touch .55s ease-out forwards;
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes receiptIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                box-shadow: 0 0 0 4px rgba(24, 165, 88, .08);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(24, 165, 88, .02);
+            }
+        }
+
+        @keyframes touch {
+            0% {
+                width: 5px;
+                height: 5px;
+                opacity: 1;
+            }
+            100% {
+                width: 65px;
+                height: 65px;
+                opacity: 0;
+                box-shadow: 0 0 0 1px rgba(201, 162, 39, .3);
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .container {
+                width: calc(100% - 20px);
+            }
+
+            .hero {
+                padding-top: 55px;
+                padding-bottom: 30px;
+            }
+
+            .redeem-card {
+                padding: 22px;
+                border-radius: 22px;
+            }
+
+            .header-card {
+                border-radius: 21px;
+            }
+
+            .receipt {
+                padding: 20px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .step-item {
+                padding: 12px 14px;
+            }
+
+            .step-desc {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ═══ HEADER ═══ -->
+        <header>
+            <div class="header-card">
+                <img class="header-logo" src="https://files.catbox.moe/kry6i1.jpg" alt="Xiroz" />
+                <div>
+                    <div class="header-label">Redeem System</div>
+                    <div class="header-name">Xiroz Malvinus</div>
+                    <div class="header-status">
+                        <span class="status-dot"></span>
+                        Redemption system online
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+
+            <!-- ═══ HERO ═══ -->
+            <section class="hero">
+                <span class="hero-line" id="typingLine">
+                    <span id="typingText"></span><span class="cursor"></span>
+                </span>
+                <p class="hero-sub">Enter your code &amp; Discord name to claim your discount</p>
+            </section>
+
+            <!-- ═══ REDEEM CARD ═══ -->
+            <section class="redeem-card">
+
+                <div class="card-head">
+                    <div class="eyebrow">Discount System</div>
+                    <h2 class="card-title">Redeem Your Code</h2>
+                    <p class="card-description">
+                        Enter your discount code and Discord name.
+                        After successful redemption, your receipt will be generated automatically.
+                    </p>
+                </div>
+
+                <form id="redeemForm" class="form">
+                    <div class="field">
+                        <label for="code">DISCOUNT CODE</label>
+                        <input id="code" type="text" placeholder="XIROZ-XXXX" autocomplete="off" required />
+                    </div>
+
+                    <div class="field">
+                        <label for="discord">DISCORD NAME</label>
+                        <input id="discord" type="text" placeholder="username / display name" maxlength="100" autocomplete="off" required />
+                    </div>
+
+                    <button id="redeemBtn" class="redeem-btn" type="submit">
+                        REDEEM DISCOUNT CODE
+                    </button>
+                </form>
+
+                <div id="message" class="message"></div>
+
+                <!-- ═══ STEPS ═══ -->
+                <div class="steps-section">
+                    <div class="steps-title">How It Works</div>
+                    <div class="steps-grid">
+
+                        <div class="step-item">
+                            <span class="step-num">1</span>
+                            <div class="step-content">
+                                <div class="step-label">Enter Code</div>
+                                <div class="step-desc">Paste your unique discount code</div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <span class="step-num">2</span>
+                            <div class="step-content">
+                                <div class="step-label">Your Discord</div>
+                                <div class="step-desc">Fill in your Discord username</div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <span class="step-num">3</span>
+                            <div class="step-content">
+                                <div class="step-label">Redeem</div>
+                                <div class="step-desc">Click the redeem button to validate</div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <span class="step-num">4</span>
+                            <div class="step-content">
+                                <div class="step-label">Get Receipt</div>
+                                <div class="step-desc">Download your SVG receipt instantly</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ═══ RECEIPT ═══ -->
+                <div id="receipt" class="receipt">
+                    <div class="receipt-header">
+                        <div class="receipt-brand">XIROZ REDEEM</div>
+                        <div class="receipt-success">SUCCESS</div>
+                    </div>
+
+                    <div class="receipt-title">Product Received</div>
+                    <div id="receiptProduct" class="receipt-product">-</div>
+
+                    <div class="receipt-list">
+                        <div class="receipt-row">
+                            <span class="receipt-label">Discount Code</span>
+                            <span id="receiptCode" class="receipt-value">-</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Discord</span>
+                            <span id="receiptDiscord" class="receipt-value">-</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Discount</span>
+                            <span id="receiptDiscount" class="receipt-value receipt-discount">-</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Redeemed At</span>
+                            <span id="receiptDate" class="receipt-value">-</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Usage</span>
+                            <span id="receiptUsage" class="receipt-value">-</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Browser ID</span>
+                            <span id="receiptBrowser" class="receipt-value">-</span>
+                        </div>
+                    </div>
+
+                    <button id="downloadReceipt" class="download-btn">
+                        ↓ DOWNLOAD RECEIPT SVG
+                    </button>
+                </div>
+
+            </section>
+
+        </main>
+
+        <footer>
+            © 2026 Xiroz Malvinus — Redeem System
+        </footer>
+
+    </div>
+
+    <script>
+        /* ════════════════════════════════════════════════
+           SUPABASE CONFIG
+           ════════════════════════════════════════════════ */
+        const SUPABASE_URL = "PASTE_SUPABASE_URL";
+        const SUPABASE_ANON_KEY = "PASTE_SUPABASE_ANON_KEY";
+
+        const supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+        /* ════════════════════════════════════════════════
+           TYPING ANIMATION — "Welcome To Redeem Code"
+           ════════════════════════════════════════════════ */
+        const fullText = "Welcome To Redeem Code";
+        const typingEl = document.getElementById("typingText");
+        let charIndex = 0;
+
+        function typeNext() {
+            if (charIndex < fullText.length) {
+                typingEl.textContent += fullText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeNext, 70);
+            }
+        }
+
+        // start after a small delay
+        setTimeout(typeNext, 500);
+
+        /* ════════════════════════════════════════════════
+           BROWSER ID
+           ════════════════════════════════════════════════ */
+        function getBrowserId() {
+            let id = localStorage.getItem("xiroz_browser_id");
+            if (!id) {
+                id = "browser-" + crypto.randomUUID();
+                localStorage.setItem("xiroz_browser_id", id);
+            }
+            return id;
+        }
+        const browserId = getBrowserId();
+
+        /* ════════════════════════════════════════════════
+           GET IP
+           ════════════════════════════════════════════════ */
+        async function getIP() {
+            try {
+                const res = await fetch("https://api.ipify.org?format=json");
+                if (!res.ok) return null;
+                const data = await res.json();
+                return data.ip || null;
+            } catch {
+                return null;
+            }
+        }
+
+        /* ════════════════════════════════════════════════
+           MESSAGE
+           ════════════════════════════════════════════════ */
+        const messageEl = document.getElementById("message");
+
+        function showMessage(text, type) {
+            messageEl.textContent = text;
+            messageEl.className = "message show " + type;
+        }
+
+        /* ════════════════════════════════════════════════
+           FORM
+           ════════════════════════════════════════════════ */
+        const form = document.getElementById("redeemForm");
+        const button = document.getElementById("redeemBtn");
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const code = document.getElementById("code").value.trim().toUpperCase();
+            const discord = document.getElementById("discord").value.trim();
+
+            if (!code) {
+                showMessage("Please enter a discount code.", "error");
+                return;
+            }
+            if (!discord) {
+                showMessage("Please enter your Discord name.", "error");
+                return;
+            }
+
+            button.classList.add("loading");
+            button.textContent = "PROCESSING...";
+            messageEl.className = "message";
+
+            try {
+                const ip = await getIP();
+
+                const { data, error } = await supabaseClient.rpc(
+                    "redeem_discount", {
+                        p_code: code,
+                        p_discord_name: discord,
+                        p_browser_id: browserId,
+                        p_ip_address: ip
+                    }
+                );
+
+                if (error) {
+                    console.error(error);
+                    throw new Error(error.message);
+                }
+
+                if (!data || !data.success) {
+                    throw new Error(data?.message || "Discount code is invalid.");
+                }
+
+                showMessage("Discount code successfully redeemed.", "success");
+                displayReceipt(data);
+
+            } catch (err) {
+                console.error(err);
+                showMessage(err.message || "Failed to redeem discount code.", "error");
+            } finally {
+                button.classList.remove("loading");
+                button.textContent = "REDEEM DISCOUNT CODE";
+            }
+        });
+
+        /* ════════════════════════════════════════════════
+           RECEIPT
+           ════════════════════════════════════════════════ */
+        let currentReceipt = null;
+
+        function displayReceipt(data) {
+            currentReceipt = data;
+
+            document.getElementById("receiptProduct").textContent = data.product || "Unknown Product";
+            document.getElementById("receiptCode").textContent = data.code || "-";
+            document.getElementById("receiptDiscord").textContent = data.discord_name || "-";
+            document.getElementById("receiptDiscount").textContent = data.discount + "%";
+            document.getElementById("receiptDate").textContent = formatDate(data.used_at);
+            document.getElementById("receiptUsage").textContent =
+                data.usage_count + " / " + (data.max_usage === null ? "∞" : data.max_usage);
+            document.getElementById("receiptBrowser").textContent = data.browser_id || "-";
+
+            document.getElementById("receipt").classList.add("show");
+            document.getElementById("receipt").scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+
+        function formatDate(value) {
+            if (!value) return "-";
+            return new Date(value).toLocaleString("id-ID", {
+                dateStyle: "medium",
+                timeStyle: "medium"
+            });
+        }
+
+        /* ════════════════════════════════════════════════
+           DOWNLOAD SVG RECEIPT
+           ════════════════════════════════════════════════ */
+        document.getElementById("downloadReceipt").addEventListener("click", function() {
+            if (!currentReceipt) return;
+
+            const product = escapeXml(currentReceipt.product || "Unknown");
+            const code = escapeXml(currentReceipt.code || "-");
+            const discord = escapeXml(currentReceipt.discord_name || "-");
+            const discount = escapeXml(String(currentReceipt.discount) + "%");
+            const date = escapeXml(formatDate(currentReceipt.used_at));
+            const usage = escapeXml(
+                currentReceipt.usage_count + " / " + (currentReceipt.max_usage === null ? "∞" : currentReceipt.max_usage)
+            );
+
+            const svg =
+                `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="900" viewBox="0 0 800 900">
+            <rect width="800" height="900" fill="#111111"/>
+            <rect x="40" y="40" width="720" height="820" rx="28" fill="#171717" stroke="#3a3a3a"/>
+            <text x="80" y="110" fill="#ffffff" font-family="Arial, sans-serif" font-size="32" font-weight="800">XIROZ REDEEM</text>
+            <text x="80" y="145" fill="#45dc83" font-family="monospace" font-size="15" font-weight="700">REDEMPTION SUCCESS</text>
+            <line x1="80" y1="185" x2="720" y2="185" stroke="#444444" stroke-dasharray="8 8"/>
+            <text x="80" y="235" fill="#888888" font-family="Arial, sans-serif" font-size="14">PRODUCT</text>
+            <text x="80" y="275" fill="#ffffff" font-family="Arial, sans-serif" font-size="28" font-weight="800">${product}</text>
+            <text x="80" y="335" fill="#888888" font-family="Arial, sans-serif" font-size="14">DISCOUNT CODE</text>
+            <text x="80" y="365" fill="#ffffff" font-family="monospace" font-size="17">${code}</text>
+            <text x="80" y="425" fill="#888888" font-family="Arial, sans-serif" font-size="14">DISCORD</text>
+            <text x="80" y="455" fill="#ffffff" font-family="Arial, sans-serif" font-size="17">${discord}</text>
+            <text x="80" y="515" fill="#888888" font-family="Arial, sans-serif" font-size="14">DISCOUNT</text>
+            <text x="80" y="545" fill="#45dc83" font-family="monospace" font-size="19" font-weight="700">${discount}</text>
+            <text x="80" y="605" fill="#888888" font-family="Arial, sans-serif" font-size="14">REDEEMED AT</text>
+            <text x="80" y="635" fill="#ffffff" font-family="monospace" font-size="15">${date}</text>
+            <text x="80" y="695" fill="#888888" font-family="Arial, sans-serif" font-size="14">USAGE</text>
+            <text x="80" y="725" fill="#ffffff" font-family="monospace" font-size="15">${usage}</text>
+            <line x1="80" y1="770" x2="720" y2="770" stroke="#444444"/>
+            <text x="80" y="815" fill="#666666" font-family="Arial, sans-serif" font-size="12">Generated by Xiroz Redeem System</text>
+          </svg>`;
+
+            const blob = new Blob([svg], { type: "image/svg+xml" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "xiroz-receipt-" + Date.now() + ".svg";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        });
+
+        function escapeXml(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&apos;");
+        }
+
+        /* ════════════════════════════════════════════════
+           TOUCH EFFECT
+           ════════════════════════════════════════════════ */
+        let lastTouch = 0;
+        document.addEventListener("pointerdown", function(e) {
+            const now = performance.now();
+            if (now - lastTouch < 100) return;
+            lastTouch = now;
+
+            const el = document.createElement("div");
+            el.className = "touch";
+            el.style.left = e.clientX + "px";
+            el.style.top = e.clientY + "px";
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 600);
+        }, { passive: true });
+    </script>
+
+</body>
+</html>
