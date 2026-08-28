@@ -13,7 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <style>
-        /* ── RESET ── */
         * {
             margin: 0;
             padding: 0;
@@ -27,9 +26,7 @@
             --muted: #777;
             --border: #e8e6df;
             --gold: #c9a227;
-            --gold2: #eadb9b;
             --green: #18a558;
-            --red: #e53935;
             --shadow: 0 25px 70px rgba(0, 0, 0, .08);
         }
 
@@ -48,7 +45,6 @@
             overflow-x: hidden;
         }
 
-        /* grid bg */
         body::before {
             content: "";
             position: fixed;
@@ -93,6 +89,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, .1);
             transition: .35s ease;
         }
+
         .header-logo:hover {
             transform: scale(1.05) rotate(-3deg);
         }
@@ -132,30 +129,35 @@
         /* ── HERO ── */
         .hero {
             text-align: center;
-            padding: 75px 0 45px;
+            padding: 70px 0 40px;
         }
 
-        .hero-line {
-            display: block;
-            font-size: clamp(36px, 8vw, 72px);
+        .hero-typing {
+            font-size: clamp(40px, 10vw, 86px);
             font-weight: 800;
             letter-spacing: -.06em;
             line-height: 1.1;
-            min-height: 1.3em;
+            min-height: 1.4em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0;
         }
 
-        .hero-line .cursor {
+        .hero-typing .cursor {
             display: inline-block;
             width: 4px;
-            height: .9em;
+            height: .85em;
             margin-left: 4px;
             vertical-align: -.06em;
             background: var(--gold);
             animation: blink .7s infinite;
+            border-radius: 2px;
         }
 
         .hero-sub {
-            margin-top: 14px;
+            margin-top: 16px;
             color: var(--muted);
             font-size: clamp(14px, 2.2vw, 19px);
             font-weight: 400;
@@ -231,10 +233,6 @@
             font-size: 11px;
             font-weight: 700;
             color: #555;
-        }
-
-        .input-wrap {
-            position: relative;
         }
 
         input {
@@ -608,8 +606,12 @@
             }
 
             .hero {
-                padding-top: 55px;
+                padding-top: 50px;
                 padding-bottom: 30px;
+            }
+
+            .hero-typing {
+                font-size: clamp(32px, 8vw, 48px);
             }
 
             .redeem-card {
@@ -678,11 +680,11 @@
 
         <main>
 
-            <!-- ═══ HERO ═══ -->
+            <!-- ═══ HERO — TYPING ANIMATION ═══ -->
             <section class="hero">
-                <span class="hero-line" id="typingLine">
-                    <span id="typingText"></span><span class="cursor"></span>
-                </span>
+                <div class="hero-typing" id="typingContainer">
+                    <span id="typingText"></span><span class="cursor" id="cursor"></span>
+                </div>
                 <p class="hero-sub">Enter your code &amp; Discord name to claim your discount</p>
             </section>
 
@@ -810,6 +812,25 @@
 
     <script>
         /* ════════════════════════════════════════════════
+           TYPING ANIMATION — "Welcome To Redeem Code"
+           ════════════════════════════════════════════════ */
+        const fullText = "Welcome To Redeem Code";
+        const typingEl = document.getElementById("typingText");
+        const cursorEl = document.getElementById("cursor");
+        let charIndex = 0;
+
+        function typeNext() {
+            if (charIndex < fullText.length) {
+                typingEl.textContent += fullText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeNext, 65);
+            }
+        }
+
+        // start typing after 500ms
+        setTimeout(typeNext, 500);
+
+        /* ════════════════════════════════════════════════
            SUPABASE CONFIG
            ════════════════════════════════════════════════ */
         const SUPABASE_URL = "PASTE_SUPABASE_URL";
@@ -819,24 +840,6 @@
             SUPABASE_URL,
             SUPABASE_ANON_KEY
         );
-
-        /* ════════════════════════════════════════════════
-           TYPING ANIMATION — "Welcome To Redeem Code"
-           ════════════════════════════════════════════════ */
-        const fullText = "Welcome To Redeem Code";
-        const typingEl = document.getElementById("typingText");
-        let charIndex = 0;
-
-        function typeNext() {
-            if (charIndex < fullText.length) {
-                typingEl.textContent += fullText.charAt(charIndex);
-                charIndex++;
-                setTimeout(typeNext, 70);
-            }
-        }
-
-        // start after a small delay
-        setTimeout(typeNext, 500);
 
         /* ════════════════════════════════════════════════
            BROWSER ID
