@@ -244,14 +244,23 @@
             gap: 10px;
         }
 
+        .row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
         .code-preview {
             margin-top: 4px;
             padding: 13px;
             border-radius: var(--radius-sm);
             border: 1px dashed rgba(201, 162, 39, .4);
             background: rgba(201, 162, 39, .06);
-            font: 700 12px var(--mono);
+            font: 700 14px var(--mono);
             word-break: break-all;
+            text-align: center;
+            letter-spacing: .04em;
+            color: #8a6d12;
         }
 
         .generate {
@@ -265,6 +274,7 @@
             font-size: 12px;
             cursor: pointer;
             transition: transform .2s ease, box-shadow .2s ease;
+            margin-top: 4px;
         }
 
         .generate:hover {
@@ -342,6 +352,7 @@
         .promo-code {
             font: 700 11px var(--mono);
             color: #8a6d12;
+            letter-spacing: .02em;
         }
 
         .product {
@@ -468,22 +479,26 @@
         }
 
         /* ═══════════════════════════════════════════════════
-                   RESPONSIVE — TABLET & MOBILE
-                   ═══════════════════════════════════════════════════ */
+           RESPONSIVE — TABLET & MOBILE
+           ═══════════════════════════════════════════════════ */
 
         @media (max-width: 950px) {
             .layout {
                 grid-template-columns: 1fr;
                 gap: 18px;
             }
-
             .hero {
                 padding-top: 55px;
                 padding-bottom: 35px;
             }
-
             h1 {
                 font-size: clamp(36px, 7vw, 56px);
+            }
+            .row-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+            .row-3 .field:last-child {
+                grid-column: 1 / -1;
             }
         }
 
@@ -492,108 +507,85 @@
                 --radius: 18px;
                 --radius-sm: 11px;
             }
-
             .container {
                 width: calc(100% - 14px);
             }
-
             .header {
                 padding: 12px 14px;
                 min-height: 70px;
                 border-radius: 18px;
             }
-
             .brand img {
                 width: 40px;
                 height: 40px;
                 border-radius: 12px;
             }
-
             .brand-title {
                 font-size: 14px;
             }
-
             .brand-sub {
                 font-size: 9px;
             }
-
             .online {
                 font-size: 8px;
                 padding: 5px 9px;
             }
-
             .online span {
                 width: 5px;
                 height: 5px;
             }
-
             .hero {
                 padding-top: 40px;
                 padding-bottom: 25px;
             }
-
             .eyebrow {
                 font-size: 8px;
             }
-
             h1 {
                 font-size: clamp(28px, 6.5vw, 40px);
                 margin-top: 6px;
             }
-
             .hero p {
                 font-size: 12px;
                 margin-top: 12px;
             }
-
             .card-head {
                 padding: 16px 16px;
             }
-
             .card-head h2 {
                 font-size: 14px;
             }
-
             .card-head p {
                 font-size: 10px;
             }
-
             .card-body {
                 padding: 16px;
             }
-
             .stats {
                 grid-template-columns: 1fr 1fr;
                 gap: 8px;
                 margin-bottom: 14px;
             }
-
             .stats .stat:last-child {
                 grid-column: 1 / -1;
             }
-
             .stat {
                 padding: 14px;
                 border-radius: 16px;
             }
-
             .stat-number {
                 font-size: 20px;
             }
-
             .stat-label {
                 font-size: 9px;
             }
-
             .field {
                 margin-bottom: 12px;
             }
-
             label {
                 font-size: 10px;
                 margin-bottom: 5px;
             }
-
             input,
             select {
                 height: 39px;
@@ -601,72 +593,65 @@
                 padding: 0 11px;
                 border-radius: 11px;
             }
-
             select {
                 background-position: right 11px center;
                 padding-right: 32px;
             }
-
             .row {
                 grid-template-columns: 1fr 1fr;
                 gap: 8px;
             }
-
+            .row-3 {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .row-3 .field:last-child {
+                grid-column: 1 / -1;
+            }
             .code-preview {
-                font-size: 10px;
+                font-size: 12px;
                 padding: 10px;
             }
-
             .generate {
                 height: 42px;
                 font-size: 11px;
                 border-radius: 11px;
             }
-
             table {
                 min-width: 500px;
             }
-
             th {
                 padding: 10px 12px;
                 font-size: 8px;
             }
-
             td {
                 padding: 11px 12px;
                 font-size: 10px;
             }
-
             .promo-code {
                 font-size: 10px;
             }
-
             .expiry {
                 font-size: 9px;
             }
-
             .badge {
                 font-size: 8px;
                 padding: 4px 7px;
             }
-
             .btn {
                 font-size: 9px;
                 padding: 5px 7px;
                 border-radius: 7px;
             }
-
             .empty {
                 padding: 30px 16px;
                 font-size: 11px;
             }
-
             footer {
                 margin-top: 50px;
                 padding: 20px 0;
                 font-size: 9px;
             }
-
             .toast {
                 font-size: 10px;
                 padding: 10px 14px;
@@ -680,71 +665,63 @@
             .container {
                 width: calc(100% - 10px);
             }
-
             .header {
                 padding: 10px 12px;
                 min-height: 60px;
                 gap: 10px;
             }
-
             .brand {
                 gap: 9px;
             }
-
             .brand img {
                 width: 34px;
                 height: 34px;
                 border-radius: 10px;
             }
-
             .brand-title {
                 font-size: 12px;
             }
-
             .brand-sub {
                 font-size: 8px;
                 margin-top: 2px;
             }
-
             .online {
                 display: none;
             }
-
             .hero {
                 padding-top: 28px;
                 padding-bottom: 18px;
             }
-
             h1 {
                 font-size: clamp(22px, 7vw, 30px);
             }
-
             .hero p {
                 font-size: 11px;
                 margin-top: 8px;
             }
-
             .card-head {
                 padding: 12px 14px;
             }
-
             .card-head h2 {
                 font-size: 13px;
             }
-
             .card-head p {
                 font-size: 9px;
             }
-
             .card-body {
                 padding: 14px;
             }
-
             .row {
                 grid-template-columns: 1fr;
                 gap: 0;
             }
-
+            .row-3 {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            .row-3 .field:last-child {
+                grid-column: 1 / -1;
+            }
             input,
             select {
                 height: 36px;
@@ -752,83 +729,66 @@
                 padding: 0 10px;
                 border-radius: 10px;
             }
-
             .code-preview {
-                font-size: 9px;
+                font-size: 10px;
                 padding: 8px 10px;
             }
-
             .generate {
                 height: 38px;
                 font-size: 10px;
             }
-
             .stats {
                 grid-template-columns: 1fr 1fr;
                 gap: 6px;
             }
-
             .stat {
                 padding: 11px;
                 border-radius: 14px;
             }
-
             .stat-number {
                 font-size: 17px;
             }
-
             .stat-label {
                 font-size: 8px;
             }
-
             table {
-                min-width: 400px;
+                min-width: 380px;
             }
-
             th {
                 padding: 8px 10px;
                 font-size: 7px;
             }
-
             td {
                 padding: 9px 10px;
                 font-size: 9px;
             }
-
             .promo-code {
                 font-size: 9px;
             }
-
             .expiry {
                 font-size: 8px;
             }
-
             .badge {
                 font-size: 7px;
                 padding: 3px 6px;
             }
-
             .btn {
                 font-size: 8px;
                 padding: 4px 6px;
                 border-radius: 6px;
             }
-
             .actions {
                 gap: 4px;
             }
-
             .empty {
                 padding: 24px 12px;
                 font-size: 10px;
             }
-
             footer {
                 margin-top: 36px;
                 padding: 16px 0;
                 font-size: 8px;
             }
-
             .toast {
                 font-size: 9px;
                 padding: 8px 12px;
@@ -859,7 +819,6 @@
             font-size: clamp(32px, 6vw, 48px);
         }
 
-        /* print-friendly */
         @media print {
             .generate,
             .btn,
@@ -912,7 +871,7 @@
             <div class="card">
                 <div class="card-head">
                     <h2>Generate Discount Code</h2>
-                    <p>Buat kode promo baru.</p>
+                    <p>Buat kode promo baru dengan format acak.</p>
                 </div>
                 <div class="card-body">
 
@@ -935,9 +894,37 @@
                         </div>
                     </div>
 
-                    <div class="field">
-                        <label>JUMLAH CODE</label>
-                        <input id="quantity" type="number" min="1" max="100" value="1" />
+                    <div class="row">
+                        <div class="field">
+                            <label>JUMLAH CODE</label>
+                            <input id="quantity" type="number" min="1" max="100" value="1" />
+                        </div>
+                        <div class="field">
+                            <label>PANJANG CODE (digit)</label>
+                            <input id="codeLength" type="number" min="4" max="20" value="10" />
+                        </div>
+                    </div>
+
+                    <div class="row-3">
+                        <div class="field">
+                            <label>JENIS CODE</label>
+                            <select id="codeType">
+                                <option value="mixed">Random (Campur)</option>
+                                <option value="numbers">Angka (0-9)</option>
+                                <option value="letters">Huruf (A-Z)</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>HURUF BESAR</label>
+                            <select id="caseOption">
+                                <option value="uppercase">YA (BESAR)</option>
+                                <option value="lowercase">Tidak (kecil)</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>AWALAN (opsional)</label>
+                            <input id="codePrefix" type="text" placeholder="XIROZ-" maxlength="10" />
+                        </div>
                     </div>
 
                     <div class="field">
@@ -946,11 +933,11 @@
                     </div>
 
                     <div class="field">
-                        <label>PREVIEW</label>
-                        <div class="code-preview" id="preview">XIROZ-XXXXXX</div>
+                        <label>PREVIEW CODE</label>
+                        <div class="code-preview" id="preview">—</div>
                     </div>
 
-                    <button class="generate" onclick="generatePromo()">GENERATE DISCOUNT CODE</button>
+                    <button class="generate" id="generateBtn">GENERATE DISCOUNT CODE</button>
 
                 </div>
             </div>
@@ -1011,35 +998,309 @@
 
     <div class="toast" id="toast"></div>
 
-    <!-- SUPABASE -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-    </script>
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  STORE — menggunakan localStorage (berfungsi tanpa Supabase)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    <script type="module">
-        /*
-        ──────────────────────────────────────────────────────────────
-        CONFIG
-        ──────────────────────────────────────────────────────────────
-        URL dan anon key TIDAK ditulis di sini.
+        const STORE_KEY = 'xiroz_discount_codes';
 
-        Buat:
-        /api/secret/config.js
+        function getStore() {
+            try {
+                const raw = localStorage.getItem(STORE_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch {
+                return [];
+            }
+        }
 
-        lalu isi:
-        export const SUPABASE_URL = "https://xxxxx.supabase.co";
-        export const SUPABASE_ANON_KEY = "xxxxx";
-        ──────────────────────────────────────────────────────────────
-        */
+        function setStore(data) {
+            localStorage.setItem(STORE_KEY, JSON.stringify(data));
+        }
 
-        import {
-            SUPABASE_URL,
-            SUPABASE_ANON_KEY
-        } from "/api/secret/config.js";
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  HELPERS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-        const { createClient } = supabase;
-        const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
+        }
 
-        /* ── device detection ── */
+        function formatDate(date) {
+            return new Date(date).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  GENERATE RANDOM CODE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function generateRandomCode(length, type, useUppercase, prefix) {
+            let chars = '';
+            if (type === 'numbers') {
+                chars = '0123456789';
+            } else if (type === 'letters') {
+                chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            } else {
+                // mixed
+                chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            }
+
+            // Untuk huruf, support lowercase jika diminta
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                const idx = Math.floor(Math.random() * chars.length);
+                let ch = chars[idx];
+                if (type === 'letters' && !useUppercase) {
+                    ch = ch.toLowerCase();
+                }
+                if (type === 'mixed' && !useUppercase) {
+                    // mixed: jika huruf, bisa lower/upper sesuai setting
+                    if (/[A-Z]/.test(ch) && !useUppercase) {
+                        ch = ch.toLowerCase();
+                    }
+                }
+                result += ch;
+            }
+
+            // Tambahkan prefix jika ada
+            if (prefix && prefix.trim()) {
+                return prefix.trim() + result;
+            }
+            return result;
+        }
+
+        function generateUniqueCodes(count, length, type, useUppercase, prefix, existingCodes) {
+            const codes = new Set(existingCodes);
+            const result = [];
+            let attempts = 0;
+            const maxAttempts = count * 50;
+
+            while (result.length < count && attempts < maxAttempts) {
+                attempts++;
+                const code = generateRandomCode(length, type, useUppercase, prefix);
+                if (!codes.has(code)) {
+                    codes.add(code);
+                    result.push(code);
+                }
+            }
+
+            if (result.length < count) {
+                showToast('Hanya ' + result.length + ' kode unik yang bisa dibuat, coba panjang atau jenis lain.');
+            }
+
+            return result;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  PREVIEW
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function updatePreview() {
+            const length = parseInt(document.getElementById('codeLength').value) || 10;
+            const type = document.getElementById('codeType').value;
+            const useUppercase = document.getElementById('caseOption').value === 'uppercase';
+            const prefix = document.getElementById('codePrefix').value.trim();
+            const preview = generateRandomCode(length, type, useUppercase, prefix);
+            document.getElementById('preview').textContent = preview || '—';
+        }
+
+        // Event listener untuk update preview
+        document.getElementById('codeLength').addEventListener('input', updatePreview);
+        document.getElementById('codeType').addEventListener('change', updatePreview);
+        document.getElementById('caseOption').addEventListener('change', updatePreview);
+        document.getElementById('codePrefix').addEventListener('input', updatePreview);
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  GENERATE PROMO (tombol)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            const product = document.getElementById('product').value.trim();
+            const discountType = document.getElementById('discountType').value;
+            const discountValue = Number(document.getElementById('discountValue').value);
+            const quantity = Math.min(Math.max(Number(document.getElementById('quantity').value) || 1, 1), 100);
+            const expiresInput = document.getElementById('expiresAt').value;
+
+            // Validasi
+            if (!product) { showToast('Nama produk wajib diisi.'); return; }
+            if (!discountValue || discountValue <= 0) { showToast('Nilai discount tidak valid.'); return; }
+            if (discountType === 'percent' && discountValue > 100) { showToast('Discount maksimal 100%.'); return; }
+            if (!expiresInput) { showToast('Tanggal dan jam expired wajib diisi.'); return; }
+
+            const expiresAt = new Date(expiresInput);
+            if (Number.isNaN(expiresAt.getTime()) || expiresAt <= new Date()) {
+                showToast('Waktu expired harus di masa depan.');
+                return;
+            }
+
+            // Ambil setting code
+            const codeLength = parseInt(document.getElementById('codeLength').value) || 10;
+            const codeType = document.getElementById('codeType').value;
+            const useUppercase = document.getElementById('caseOption').value === 'uppercase';
+            const prefix = document.getElementById('codePrefix').value.trim();
+
+            // Ambil kode yang sudah ada
+            const existing = getStore();
+            const existingCodes = existing.map(item => item.code);
+
+            // Generate kode unik
+            const newCodes = generateUniqueCodes(quantity, codeLength, codeType, useUppercase, prefix, existingCodes);
+
+            if (newCodes.length === 0) {
+                showToast('Gagal membuat kode unik. Coba ubah pengaturan.');
+                return;
+            }
+
+            // Buat row data
+            const rows = newCodes.map(code => ({
+                id: Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                code: code,
+                product_name: product,
+                discount_type: discountType,
+                discount_value: discountValue,
+                expires_at: expiresAt.toISOString(),
+                used: false,
+                created_at: new Date().toISOString()
+            }));
+
+            // Simpan
+            const updated = [...existing, ...rows];
+            setStore(updated);
+
+            showToast(newCodes.length + ' discount code berhasil dibuat.');
+
+            // Reset form
+            document.getElementById('product').value = '';
+            document.getElementById('discountValue').value = '';
+            document.getElementById('expiresAt').value = '';
+            updatePreview();
+
+            // Refresh tabel
+            renderTable();
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  RENDER TABLE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function renderTable() {
+            const data = getStore();
+            const table = document.getElementById('promoTable');
+
+            if (!data || !data.length) {
+                table.innerHTML = `
+              <tr><td colspan="6"><div class="empty">Belum ada discount code.</div></td></tr>
+            `;
+                updateStats([]);
+                return;
+            }
+
+            // Urutkan dari yang terbaru
+            const sorted = [...data].sort((a, b) => {
+                return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+            });
+
+            table.innerHTML = '';
+
+            sorted.forEach(promo => {
+                const expired = new Date(promo.expires_at) <= new Date();
+                const discount = promo.discount_type === 'percent' ?
+                    promo.discount_value + '%' :
+                    'Rp ' + Number(promo.discount_value).toLocaleString('id-ID');
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+              <td><span class="promo-code">${escapeHtml(promo.code)}</span></td>
+              <td><span class="product">${escapeHtml(promo.product_name)}</span></td>
+              <td><span class="discount">${discount}</span></td>
+              <td><span class="expiry">${formatDate(promo.expires_at)}</span></td>
+              <td><span class="badge ${expired ? 'expired' : 'active'}">${expired ? 'EXPIRED' : 'ACTIVE'}</span></td>
+              <td>
+                <div class="actions">
+                  <button class="btn copy-btn" data-code="${escapeHtml(promo.code)}">COPY</button>
+                  <button class="btn delete delete-btn" data-id="${promo.id}">DELETE</button>
+                </div>
+              </td>
+            `;
+                table.appendChild(tr);
+            });
+
+            updateStats(data);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  UPDATE STATS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function updateStats(data) {
+            const now = new Date();
+            let active = 0,
+                expired = 0;
+            data.forEach(item => {
+                if (new Date(item.expires_at) > now) active++;
+                else expired++;
+            });
+            document.getElementById('totalCodes').textContent = data.length;
+            document.getElementById('activeCodes').textContent = active;
+            document.getElementById('expiredCodes').textContent = expired;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  COPY & DELETE (event delegation)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        document.getElementById('promoTable').addEventListener('click', async function(e) {
+            // Copy
+            const copyBtn = e.target.closest('.copy-btn');
+            if (copyBtn) {
+                const code = copyBtn.dataset.code;
+                try {
+                    await navigator.clipboard.writeText(code);
+                    showToast('Code berhasil dicopy: ' + code);
+                } catch {
+                    // fallback
+                    const textarea = document.createElement('textarea');
+                    textarea.value = code;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    showToast('Code berhasil dicopy: ' + code);
+                }
+                return;
+            }
+
+            // Delete
+            const delBtn = e.target.closest('.delete-btn');
+            if (delBtn) {
+                const id = delBtn.dataset.id;
+                if (!confirm('Hapus discount code ini?')) return;
+
+                let data = getStore();
+                data = data.filter(item => item.id !== id);
+                setStore(data);
+                showToast('Discount berhasil dihapus.');
+                renderTable();
+            }
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  DEVICE DETECTION
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
         function detectDevice() {
             const ua = navigator.userAgent;
             const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(ua);
@@ -1057,7 +1318,6 @@
                 body.classList.add('is-desktop');
             }
 
-            // also watch resize for hybrid devices
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
@@ -1072,178 +1332,20 @@
         }
         detectDevice();
 
-        /* ── helpers ── */
-        window.showToast = function(message) {
-            const toast = document.getElementById("toast");
-            toast.textContent = message;
-            toast.classList.add("show");
-            clearTimeout(toast._timer);
-            toast._timer = setTimeout(() => toast.classList.remove("show"), 2500);
-        };
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  INIT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-        function randomCode() {
-            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-            let result = "";
-            for (let i = 0; i < 8; i++) {
-                result += chars[Math.floor(Math.random() * chars.length)];
-            }
-            return "XIROZ-" + result;
-        }
-
-        /* ── preview ── */
-        document.getElementById("preview").textContent = randomCode();
-
-        /* ── generate ── */
-        window.generatePromo = async function() {
-            const product = document.getElementById("product").value.trim();
-            const discountType = document.getElementById("discountType").value;
-            const discountValue = Number(document.getElementById("discountValue").value);
-            const quantity = Math.min(Math.max(Number(document.getElementById("quantity").value) || 1, 1), 100);
-            const expiresInput = document.getElementById("expiresAt").value;
-
-            if (!product) { showToast("Nama produk wajib diisi."); return; }
-            if (!discountValue || discountValue <= 0) { showToast("Nilai discount tidak valid."); return; }
-            if (discountType === "percent" && discountValue > 100) { showToast("Discount maksimal 100%."); return; }
-            if (!expiresInput) { showToast("Tanggal dan jam expired wajib diisi."); return; }
-
-            const expiresAt = new Date(expiresInput);
-            if (Number.isNaN(expiresAt.getTime()) || expiresAt <= new Date()) {
-                showToast("Waktu expired harus di masa depan.");
-                return;
-            }
-
-            const rows = [];
-            for (let i = 0; i < quantity; i++) {
-                rows.push({
-                    code: randomCode(),
-                    product_name: product,
-                    discount_type: discountType,
-                    discount_value: discountValue,
-                    expires_at: expiresAt.toISOString(),
-                    used: false
-                });
-            }
-
-            showToast("Menyimpan discount...");
-
-            const { error } = await db.from("discount_codes").insert(rows);
-            if (error) {
-                console.error(error);
-                showToast("Gagal menyimpan: " + error.message);
-                return;
-            }
-
-            showToast(quantity + " discount code berhasil dibuat.");
-            document.getElementById("product").value = "";
-            document.getElementById("discountValue").value = "";
-            await loadPromos();
-        };
-
-        /* ── load promos ── */
-        async function loadPromos() {
-            const table = document.getElementById("promoTable");
-
-            const { data, error } = await db
-                .from("discount_codes")
-                .select("*")
-                .order("created_at", { ascending: false });
-
-            if (error) {
-                console.error(error);
-                table.innerHTML = `
-              <tr><td colspan="6"><div class="empty">Gagal mengambil data.</div></td></tr>
-            `;
-                return;
-            }
-
-            if (!data || !data.length) {
-                table.innerHTML = `
-              <tr><td colspan="6"><div class="empty">Belum ada discount code.</div></td></tr>
-            `;
-                updateStats([]);
-                return;
-            }
-
-            table.innerHTML = "";
-
-            data.forEach(promo => {
-                const expired = new Date(promo.expires_at) <= new Date();
-                const discount = promo.discount_type === "percent" ?
-                    promo.discount_value + "%" :
-                    "Rp " + Number(promo.discount_value).toLocaleString("id-ID");
-
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-              <td><span class="promo-code">${escapeHtml(promo.code)}</span></td>
-              <td><span class="product">${escapeHtml(promo.product_name)}</span></td>
-              <td><span class="discount">${discount}</span></td>
-              <td><span class="expiry">${formatDate(promo.expires_at)}</span></td>
-              <td><span class="badge ${expired ? 'expired' : 'active'}">${expired ? 'EXPIRED' : 'ACTIVE'}</span></td>
-              <td>
-                <div class="actions">
-                  <button class="btn" data-copy="${escapeHtml(promo.code)}">COPY</button>
-                  <button class="btn delete" data-delete="${promo.id}">DELETE</button>
-                </div>
-              </td>
-            `;
-                table.appendChild(tr);
-            });
-
-            updateStats(data);
-        }
-
-        function updateStats(data) {
+        // Set default expired ke 7 hari dari sekarang
+        (function setDefaultExpiry() {
             const now = new Date();
-            let active = 0,
-                expired = 0;
-            data.forEach(item => {
-                if (new Date(item.expires_at) > now) active++;
-                else expired++;
-            });
-            document.getElementById("totalCodes").textContent = data.length;
-            document.getElementById("activeCodes").textContent = active;
-            document.getElementById("expiredCodes").textContent = expired;
-        }
+            now.setDate(now.getDate() + 7);
+            const value = now.toISOString().slice(0, 16);
+            document.getElementById('expiresAt').value = value;
+        })();
 
-        /* ── copy / delete ── */
-        document.getElementById("promoTable").addEventListener("click", async event => {
-            const copyButton = event.target.closest("[data-copy]");
-            if (copyButton) {
-                const code = copyButton.dataset.copy;
-                await navigator.clipboard.writeText(code);
-                showToast("Code berhasil dicopy.");
-                return;
-            }
-
-            const deleteButton = event.target.closest("[data-delete]");
-            if (deleteButton) {
-                const id = deleteButton.dataset.delete;
-                if (!confirm("Hapus discount code ini?")) return;
-
-                const { error } = await db.from("discount_codes").delete().eq("id", id);
-                if (error) { showToast("Gagal menghapus."); return; }
-                showToast("Discount berhasil dihapus.");
-                loadPromos();
-            }
-        });
-
-        /* ── date format ── */
-        function formatDate(date) {
-            return new Date(date).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" });
-        }
-
-        /* ── html escape ── */
-        function escapeHtml(value) {
-            return String(value)
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
-        }
-
-        /* ── start ── */
-        loadPromos();
+        updatePreview();
+        renderTable();
     </script>
 
 </body>
